@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,19 +9,30 @@
     <body>
         <h1>Alta de incidencia diaria Covid</h1>
         <p>Formulario de alta de incidencias.</p>
-        <p>Aquí podrás insertar la informacion de tu provincia</p>
+        <p>Aquí podrás insertar la informacion de su provincia</p>
 
-        <form action="/provincias" method="POST">
-            <input type="text" name="provincia" id="">
-            <input type="date" name="fecha">
-            <input type="number" name="num_casos" id="">
-            <input type="number" name="num_casos_prueba_pcr" id="">
-            <input type="number" name="num_casos_prueba_test_ac" id="">
-            <input type="number" name="num_casos_prueba_ag" id="">
-            <input type="number" name="num_casos_prueba_elisa" id="">
-            <input type="number" name="num_casos_prueba_desconocida" id="">
-            <button type="submit">Enviar</button>
-        </form>
+        <form action="/incidencias-diarias" method="post">
+            <div>
+                <label for="provincia">Provincia:</label>
+                <input type="text" name="provincia" placeholder="Escribe la provincia en mayuscula" required><br>
+                <label for="fecha">Fecha:</label>
+                <input type="date" name="fecha" required><br>
+                <label for="num_casos">Numero de casos totales:</label>
+                <input type="number" name="num_casos" id="" placeholder="num_casos" required value="0"><br>
+                <p>Debe usted introducir un numero positivo y entero</p>
+                <label for="num_casos_prueba_pcr">PCR:</label>
+                <input type="number" name="num_casos_prueba_pcr" id="" placeholder="prueba_pcr" required value="0"><br>
+                <label for="num_casos_prueba_test_ac">TEST:</label>
+                <input type="number" name="num_casos_prueba_test_ac" id="" placeholder="prueba_test_ac" required value="0"><br>
+                <label for="num_casos_prueba_ag">Prueba de antígenos:</label>
+                <input type="number" name="num_casos_prueba_ag" id="" placeholder="prueba_ag" required value="0"><br>
+                <label for="num_casos_prueba_elisa">Test Elisa:</label>
+                <input type="number" name="num_casos_prueba_elisa" id="" placeholder="prueba_elisa" required value="0"><br>
+                <label for="num_casos_prueba_desconocida">Prueba no determinada:</label>
+                <input type="number" name="num_casos_prueba_desconocida" id="" placeholder="prueba_desconocida" required value="0"><br>
+                <button class="w3-btn w3-blue" type="submit">Enviar</button>
+            </div>
+          </form>
         
         
     </body>

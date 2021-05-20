@@ -4,7 +4,7 @@ from covid import app
 
 import csv, json
 
-from flask import render_template #va a buscar el fichero template
+from flask import render_template, request #va a buscar el fichero template
 
 
 @app.route('/provincias')
@@ -36,7 +36,7 @@ def laprovincia(codigoProvincia):
 @app.route('/casos/<int:year>/<int:mes>', defaults={'dia':None})
 @app.route('/casos/<int:year>/<int:mes>/<int:dia>')
 def casos(year, mes, dia=None):
-    if not mes:
+    if not mes: #tambien se podría poner if dia==None
         fecha = '{:04d}'.format(year)
     elif not dia:
         fecha = '{:04d}-{:02d}'.format(year, mes)
@@ -49,6 +49,7 @@ def casos(year, mes, dia=None):
     fichero = open('data/casos_diagnostico_provincia.csv', 'r')
     dictreader= csv.DictReader(fichero)
 
+    #se crea el diccionario que se va a querer representar
     res= {
             'num_casos': 0,
     'num_casos_prueba_pcr':0,
@@ -71,9 +72,25 @@ def casos(year, mes, dia=None):
     
     return json.dumps(res) #se nevia una cadena de etxto pero se pasa luego al json
 
-@app.route('/incidenciadiaria')
+@app.route('/incidenciadiaria', methods = ['GET', 'POST'])
 def incidencias():
-    return render_template('alta.html')
+    if request.method =='GET':
+        return render_template("alta.html")
+
+    #hay que validar la informacion de llegada
+    #que los valores de los casos sean numeros y enteros positivos
+    valores = request.form
+
+    try:
+        valores.num_casos_prueba_pcr = int( valores.num_casos_prueba_pcr)
+    except:
+        return render_template("alta.html", PCR="valor no valido" )
+
+    #que el total de casos sea la suma del resto de casos
+    #que la provincia sea correcta
+    #que la fecha no sea futura ni anterior a fecha covid
+    #que la fecha sea correcta en formato y supongo que en valor
+    return 'se ha hecho un post'
 
 '''
 MI CODIGO
