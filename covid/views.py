@@ -3,6 +3,7 @@
 from covid import app
 
 import csv, json
+from datetime import date
 
 from flask import render_template, request #va a buscar el fichero template
 
@@ -74,21 +75,60 @@ def casos(year, mes, dia=None):
 
 @app.route('/incidenciadiaria', methods = ['GET', 'POST'])
 def incidencias():
+    formulario = {
+        'provincia':'',
+        'fecha': str(date.today()),
+        'num_casos_prueba_pcr':0,
+        'num_casos_prueba_test_ac':0,
+        'num_casos_prueba_ag':0,
+        'num_casos_prueba_elisa':0,
+        'num_casos_prueba_desconocida':0
+    }
+
+    #VALIDACIONES
+
+    #Valicacion PROVINCIA:
+    fichero = open('data/provincias.csv', 'r', encoding='utf8')
+    csvreader= csv.reader(fichero, delimiter=',')
+
+    lista = []
+    for registro in csvreader:
+        dic={'codigo': registro[0], 'descripcion': registro[1]}
+        lista.append(dic)
+
+    fichero.close() #QUE NO SE OLVIDEEE!
+
     if request.method =='GET':
-        return render_template("alta.html")
+        return render_template("alta.html", datos = formulario, provincias=lista, error='')
 
-    #hay que validar la informacion de llegada
-    #que los valores de los casos sean numeros y enteros positivos
-    valores = request.form
+    #guardamos los datos:
+    for clave in formulario:
+        formulario[clave] = request.form[clave]
 
+    #Validacion NUMEROS enteros y positivos:
+    num_pcr= request.form['num_casos_prueba_pcr']
     try:
-        valores.num_casos_prueba_pcr = int( valores.num_casos_prueba_pcr)
+        num_pcr=int(num_pcr)
+        if num_pcr < 0:
+            raise ValueError('Debe ser no negativo')
+
+    except ValueError:
+        return render_template('alta.html', datos= formulario, provincias=lista, error= 'PCR no puede ser negativo')
+
+    '''
+    valores = request.form
+    try:
+
+        num_pcr = int(valores['num_casos_prueba_pcr'])
+        if  num_pcr < 0:
+            raise ValueError('Debe ser positivo') #lanzo yo la excepcion
     except:
-        return render_template("alta.html", PCR="valor no valido" )
+        return render_template("alta.html", casos_pcr='Introduce un valor correcto' )
+
+    '''
 
     #que el total de casos sea la suma del resto de casos
-    #que la provincia sea correcta
-    #que la fecha no sea futura ni anterior a fecha covid
+    #que la fecha no sea futura ni anterior a fecha covid (1 de octubre de 2019)
     #que la fecha sea correcta en formato y supongo que en valor
     return 'se ha hecho un post'
 

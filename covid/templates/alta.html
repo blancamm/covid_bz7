@@ -11,29 +11,56 @@
         <p>Formulario de alta de incidencias.</p>
         <p>Aquí podrás insertar la informacion de su provincia</p>
 
-        <form action="/incidencias-diarias" method="post">
+        <form action="/incidenciadiaria" method="post">
             <div>
-                <label for="provincia">Provincia:</label>
-                <input type="text" name="provincia" placeholder="Escribe la provincia en mayuscula" required><br>
-                <label for="fecha">Fecha:</label>
-                <input type="date" name="fecha" required><br>
-                <label for="num_casos">Numero de casos totales:</label>
-                <input type="number" name="num_casos" id="" placeholder="num_casos" required value="0"><br>
-                <p>Debe usted introducir un numero positivo y entero</p>
-                <label for="num_casos_prueba_pcr">PCR:</label>
-                <input type="number" name="num_casos_prueba_pcr" id="" placeholder="prueba_pcr" required value="0"><br>
-                <label for="num_casos_prueba_test_ac">TEST:</label>
-                <input type="number" name="num_casos_prueba_test_ac" id="" placeholder="prueba_test_ac" required value="0"><br>
-                <label for="num_casos_prueba_ag">Prueba de antígenos:</label>
-                <input type="number" name="num_casos_prueba_ag" id="" placeholder="prueba_ag" required value="0"><br>
-                <label for="num_casos_prueba_elisa">Test Elisa:</label>
-                <input type="number" name="num_casos_prueba_elisa" id="" placeholder="prueba_elisa" required value="0"><br>
-                <label for="num_casos_prueba_desconocida">Prueba no determinada:</label>
-                <input type="number" name="num_casos_prueba_desconocida" id="" placeholder="prueba_desconocida" required value="0"><br>
+                <div>
+                    <label for="provincia">Provincia (Introduzca el indicativo de las antiguas matriculas):</label>
+                    <select name="provincia" 
+                            required>
+                            {% for provincia in provincias %}
+                                <option value="{{provincia.codigo}}">{{provincia.descripcion}}</option>
+
+                            {% endfor %}
+
+                    </select>
+                </div>
+                <div>
+                    <label for="fecha">Fecha:</label>
+                    <input type="date" name="fecha" required
+                            value="{{datos.fecha}}">
+                </div>
+                <div>
+                    <label for="num_casos_prueba_pcr">PCR:</label>
+                    <input type="text" name="num_casos_prueba_pcr" 
+                            placeholder="prueba_pcr" required value="{{datos.num_casos_prueba_pcr}}">    
+                </div>
+                <div>
+                    <label for="num_casos_prueba_test_ac">TEST:</label>
+                    <input type="number" name="num_casos_prueba_test_ac" 
+                            placeholder="prueba_test_ac" required value="{{datos.num_casos_prueba_test_ac}}">
+                </div>
+                <div>
+                    <label for="num_casos_prueba_ag">Prueba de antígenos:</label>
+                    <input type="number" name="num_casos_prueba_ag" 
+                            placeholder="prueba_ag" required value="{{datos.num_casos_prueba_ag}}">
+                </div>   
+                <div>
+                    <label for="num_casos_prueba_elisa">Test Elisa:</label>
+                    <input type="number" name="num_casos_prueba_elisa" 
+                            placeholder="prueba_elisa" required value="{{datos.num_casos_prueba_elisa}}">
+                </div>
+                <div>
+                    <label for="num_casos_prueba_desconocida">Prueba no determinada:</label>
+                    <input type="number" name="num_casos_prueba_desconocida" 
+                            placeholder="prueba_desconocida" required value="{{datos.num_casos_prueba_desconocida}}">
+                </div>
+                
                 <button class="w3-btn w3-blue" type="submit">Enviar</button>
             </div>
-          </form>
-        
-        
+        </form>
+        {% if error != ''%}
+        <p>{{error}}</p>
+        {% endif %}
+           
     </body>
 </html>
